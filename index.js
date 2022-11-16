@@ -82,6 +82,40 @@
     }
   }
 
+  exports.functionNameResolver = function (/** @type {string} */ name) {
+    // i[start_]end[$step][_functionName]
+    const [
+      i0 = 0,
+      i1,
+      i2 = 1
+    ] = /i(\d+)?_(\d+)(?:\$(\d+))?/.exec(name)?.slice(1) ?? []
+
+    if (!name.startsWith('i')) {
+      throw new TypeError('Invalid function name')
+    }
+    if ([i0, i1, i2].some(v => Number.isNaN(+v))) {
+      throw new TypeError('Invalid function name, must be i[start_]end[$step][_functionName]')
+    }
+
+    return [+i0, +i1, +i2]
+  }
+
+  exports.registerFunctionIterator = function () {
+    Function.prototype[Symbol.iterator] = function* () {
+      /** @type {[number, number, number]} */
+      let [start, end, step] = []
+      let func = this
+      if (this.name) {
+        [start, end, step] = exports.functionNameResolver(this.name)
+        for (let i of exports.range(end, start, step)) {
+          yield func(i)
+        }
+      } else {
+        throw new TypeError('Not implemented')
+      }
+    }
+  }
+
   exports.registerAll = function () {
     exports.registerNumberIterator()
     exports.registerRegExpIterator()

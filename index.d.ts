@@ -20,6 +20,8 @@ declare namespace iterateur {
   export function range(start: number, end: number, step: number): Generator<number>
   export function registerNumberIterator(): void;
   export function registerRegExpIterator(): void;
+  export function functionNameResolver(name: string): [number, number, number];
+  export function registerFunctionIterator(): void;
   export function registerAll(): void;
 }
 
