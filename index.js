@@ -50,12 +50,30 @@
     return [...this[Symbol.iterator](step)]
   }
 
-  /**
-   * rule
-   * [start~]end[:step]
-   */
   RegExp.prototype[Symbol.iterator] = function* () {
-    const str = this.source
+    // /[start~]end[:step]/
+    let [i0, ix = ''] = this.source
+      .split('~')
+    if (ix === '') {
+      [ix, i0] = [i0, ix]
+    }
+    const [i1, i2 = '1'] = ix.split(':')
+
+    const [start, end, step] = [i0 ? +i0 : 0,  +i1, +i2]
+
+    let direction = start > end ? -1 : 1
+
+    if (end < 0) {
+      direction = -1
+    }
+
+    for (
+      let i = start;
+      direction > 0 ? i < end : i > end;
+      i += step * direction
+    ) {
+      yield i
+    }
   }
 
   module

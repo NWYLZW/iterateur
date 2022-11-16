@@ -58,3 +58,26 @@ describe('Number', () => {
     expect(numbers).to.eql([ 0, 2, 4, 6, 8 ])
   })
 })
+
+describe('RegExp', () => {
+  it('should iterate from 0 to 10', () => {
+    const numbers = [.../10/]
+    expect(numbers).to.eql([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+  })
+  it('should iterate from 0 to -10', () => {
+    const numbers = [.../-10/]
+    expect(numbers).to.eql([0, -1, -2, -3, -4, -5, -6, -7, -8, -9])
+  })
+  it('should iterate from 2 to 12', () => {
+    const numbers = [.../2~12/]
+    expect(numbers).to.eql([2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+  })
+  it('should iterate from 10 to 2', () => {
+    const numbers = [.../10~2/]
+    expect(numbers).to.eql([ 10, 9, 8, 7, 6, 5, 4, 3 ])
+  })
+  it('should iterate from 0 to 10 with step', () => {
+    const numbers = [.../0~10:2/]
+    expect(numbers).to.eql([ 0, 2, 4, 6, 8 ])
+  })
+})
