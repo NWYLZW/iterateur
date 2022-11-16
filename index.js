@@ -22,7 +22,7 @@
   }
   exports.InfinityError = InfinityError
 
-  exports.range = function* (end, start = 0, step = 1) {
+  exports.range = function* (/** @type {number} */ end, start = 0, step = 1) {
     let direction = start < 0 ? -1 : 1
 
     if (start > end) {
