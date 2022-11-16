@@ -94,7 +94,7 @@
     ] = /i(\d+)?_(\d+)(?:\$(\d+))?/.exec(name)?.slice(1) ?? []
 
     if (!name.startsWith('i')) {
-      throw new TypeError('Invalid function name')
+      throw new TypeError('Invalid function name, must start with "i"')
     }
     if ([i0, i1, i2].some(v => Number.isNaN(+v))) {
       throw new TypeError('Invalid function name, must be i[start_]end[$step][_functionName]')
