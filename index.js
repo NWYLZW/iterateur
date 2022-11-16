@@ -19,7 +19,6 @@
     if (val === Infinity) {
       let i = 0
       while (exports.INFINITY_LIMIT === -1 || i++ < exports.INFINITY_LIMIT) {
-        console.log()
         yield Infinity
       }
       throw new InfinityError()
