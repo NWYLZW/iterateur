@@ -1,8 +1,19 @@
-(function (moudle) {
-  var exports = {
-    INFINITY_LIMIT: -1,
-    default: exports,
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define(['exports'], factory);
+  } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
+    // CommonJS
+    factory(exports);
+  } else {
+    // Browser globals
+    factory((root.commonJsStrict = {}));
   }
+}(typeof self !== 'undefined' ? self : this, function (exports) {
+  // attach properties to the exports object to define
+  // the exported module properties.
+  exports.INFINITY_LIMIT = -1
+  exports.default = exports
 
   class InfinityError extends Error {
     constructor() {
@@ -74,9 +85,4 @@
       yield i
     }
   }
-
-  module
-    && typeof module === 'object'
-    && typeof module.exports === 'object'
-    && (module.exports = exports)
-})(module);
+}));
