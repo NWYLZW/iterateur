@@ -3,6 +3,7 @@ const iterateur = require('./index.js')
 const { expect } = require('chai')
 
 describe('Number', () => {
+  iterateur.registerNumberIterator()
   it('should iterate from 0 to 10', () => {
     const numbers = [...10]
     expect(numbers).to.eql([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
@@ -60,6 +61,7 @@ describe('Number', () => {
 })
 
 describe('RegExp', () => {
+  iterateur.registerRegExpIterator()
   it('should iterate from 0 to 10', () => {
     const numbers = [.../10/]
     expect(numbers).to.eql([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
