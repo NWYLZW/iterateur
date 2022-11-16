@@ -42,7 +42,7 @@ console.log([.../10:2/]); // [ 0, 2, 4, 6, 8 ]
 console.log([.../1~10:2/]); // [ 1, 3, 5, 7, 9 ]
 ```
 
-### ~~Function~~
+### Function
 ```js
 console.log([...function i2_20$3(i) {
   return i < 10 ? `foo-${i}` : null;
