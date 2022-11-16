@@ -22,6 +22,21 @@
   }
   exports.InfinityError = InfinityError
 
+  exports.range = function* (end, start = 0, step = 1) {
+    let direction = start < 0 ? -1 : 1
+
+    if (start > end) {
+      direction = -direction
+    }
+    for (
+      let i = start;
+      direction > 0 ? i < end : i > end;
+      i += direction * step
+    ) {
+      yield i
+    }
+  }
+
   exports.registerNumberIterator = function () {
     Number.prototype[Symbol.iterator] = function* (step = 1) {
       const val = this.valueOf()
@@ -35,26 +50,15 @@
         }
         throw new InfinityError()
       }
-      let direction = val < 0 ? -1 : 1
       let start = 0, end = val
       if (!Number.isInteger(val)) {
         const [l, r] = /-?(\d+)\.(\d+)/.exec(val).slice(1)
         ;[start, end] = [+l, +r]
-        if (direction === -1) {
+        if (val < 0) {
           ;[start, end] = [end, start]
-          direction = 1
-        }
-        if (start > end) {
-          direction = -direction
         }
       }
-      for (
-        let i = start;
-        direction > 0 ? i < end : i > end;
-        i += direction * step
-      ) {
-        yield i
-      }
+      return yield* exports.range(end, start, step)
     }
 
     Number.prototype.step = function (step) {
