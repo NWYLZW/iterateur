@@ -1,9 +1,14 @@
 {
   "name": "iterateur",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "index.js",
   "types": "index.d.ts",
   "author": "YiJie <yijie4188@gmail.com>",
+  "homepage": "https://github.com/NWYLZW/iterateur",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:NWYLZW/iterateur.git"
+  },
   "license": "MIT",
   "files": [
     "README.md",
