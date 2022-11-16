@@ -5,6 +5,9 @@ declare module global {
   }
 
   interface RegExp {
+    /**
+     * rule: /[start~]end[:step]/
+     */
     [Symbol.iterator](): Iterator<Number>;
   }
 }
@@ -14,6 +17,7 @@ declare namespace iterateur {
     constructor();
   }
   export const INFINITY_LIMIT: number;
+  export function range(start: number, end: number, step: number): Generator<number>
   export function registerNumberIterator(): void;
   export function registerRegExpIterator(): void;
   export function registerAll(): void;
