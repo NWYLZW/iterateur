@@ -7,7 +7,7 @@
     factory(exports);
   } else {
     // Browser globals
-    factory((root.commonJsStrict = {}));
+    factory((root.iterateur = {}));
   }
 }(typeof self !== 'undefined' ? self : this, function (exports) {
   // attach properties to the exports object to define
