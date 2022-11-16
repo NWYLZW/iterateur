@@ -5,9 +5,14 @@ A powerful iterator for JavaScript.
 # How to use
 
 ## Node.js
-```js
-require('iterateur');
 
+* by require `node -r iterateur/register`
+* by optional require
+  * `require('iterateur').registerNumberIterator()`
+  * `require('iterateur').registerRegExpIterator()`
+  * ...
+
+```js
 console.log([...10]); // [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
 console.log([...-10]); // [ 0, -1, -2, -3, -4, -5, -6, -7, -8, -9 ]
 console.log([...2.5]); // [ 2, 3, 4 ]
