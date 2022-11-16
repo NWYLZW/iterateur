@@ -1,0 +1,23 @@
+{
+  "name": "iterateur",
+  "version": "0.1.4",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "author": "YiJie <yijie4188@gmail.com>",
+  "license": "MIT",
+  "files": [
+    "README.md",
+    "index.js",
+    "index.d.ts"
+  ],
+  "keywords": [
+    "prototype",
+    "interator",
+    "util",
+    "tool"
+  ],
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.1.0"
+  }
+}
