@@ -78,19 +78,7 @@
 
       const [start, end, step] = [i0 ? +i0 : 0,  +i1, +i2]
 
-      let direction = start > end ? -1 : 1
-
-      if (end < 0) {
-        direction = -1
-      }
-
-      for (
-        let i = start;
-        direction > 0 ? i < end : i > end;
-        i += step * direction
-      ) {
-        yield i
-      }
+      return yield* exports.range(end, start, step)
     }
   }
 
