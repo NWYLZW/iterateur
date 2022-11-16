@@ -82,6 +82,26 @@ describe('RegExp', () => {
     const numbers = [.../0~10:2/]
     expect(numbers).to.eql([ 0, 2, 4, 6, 8 ])
   })
+  it('should resolve the RegExpName', () => {
+    expect(iterateur.regexpNameResolver(/10/))
+      .to.eql([0, 10, 1])
+    expect(iterateur.regexpNameResolver(/0~10/))
+      .to.eql([0, 10, 1])
+    expect(iterateur.regexpNameResolver(/0~13:2/))
+      .to.eql([0, 13, 2])
+    expect(iterateur.regexpNameResolver(/5~13:2/))
+      .to.eql([5, 13, 2])
+  })
+  it('should custom the function name resolver', () => {
+    const oldResolver = iterateur.regexpNameResolver
+
+    iterateur.regexpNameResolver = regexp => regexp.source === 'any' ? [0, 10, 1] : oldResolver(regexp)
+    expect([.../any/]).to.eql([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+    expect([.../5/]).to.eql([0, 1, 2, 3, 4])
+
+    iterateur.regexpNameResolver = oldResolver
+  })
 })
 
 describe('Function', () => {

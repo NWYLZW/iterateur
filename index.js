@@ -66,18 +66,21 @@
     }
   }
 
+  exports.regexpNameResolver = function (/** @type {RegExp} */ regexp) {
+    // /[start~]end[:step]/
+    let [i0, ix = ''] = regexp.source
+      .split('~')
+    if (ix === '') {
+      [ix, i0] = [i0, ix]
+    }
+    const [i1, i2 = '1'] = ix.split(':')
+
+    return [i0 ? +i0 : 0,  +i1, +i2]
+  }
+
   exports.registerRegExpIterator = function () {
     RegExp.prototype[Symbol.iterator] = function* () {
-      // /[start~]end[:step]/
-      let [i0, ix = ''] = this.source
-        .split('~')
-      if (ix === '') {
-        [ix, i0] = [i0, ix]
-      }
-      const [i1, i2 = '1'] = ix.split(':')
-
-      const [start, end, step] = [i0 ? +i0 : 0,  +i1, +i2]
-
+      const [start, end, step] = exports.regexpNameResolver(this)
       return yield* exports.range(end, start, step)
     }
   }
