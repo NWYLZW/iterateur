@@ -13,8 +13,14 @@
   "files": [
     "README.md",
     "index.js",
-    "index.d.ts"
+    "index.d.ts",
+    "register.js"
   ],
+  "exports": {
+    ".": "./index.js",
+    "./register": "./register.js",
+    "./package.json": "./package.json"
+  },
   "keywords": [
     "prototype",
     "interator",
