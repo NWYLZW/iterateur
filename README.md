@@ -2,6 +2,13 @@
 
 A powerful iterator for JavaScript.
 
+[![npm][npm]][npm-url]
+[![node][node]][node-url]
+[![size][size]][size-url]
+
+[//]: # ([![coverage][cover]][cover-url])
+[//]: # ([![tests][tests]][tests-url])
+
 # How to use
 
 ## Node.js
@@ -54,3 +61,14 @@ console.log([...() => [
 ]]);
 // [ 'foo-2', 'foo-5', 'foo-9' ]
 ```
+
+[npm]:       https://img.shields.io/npm/v/iterateur.svg
+[npm-url]:   https://npmjs.com/package/iterateur
+[node]:      https://img.shields.io/node/v/iterateur.svg
+[node-url]:  https://nodejs.org
+[tests]:     https://github.com/webpack-contrib/iterateur/workflows/iterateur/badge.svg
+[tests-url]: https://github.com/webpack-contrib/iterateur/actions
+[cover]:     https://codecov.io/gh/webpack-contrib/iterateur/branch/master/graph/badge.svg
+[cover-url]: https://codecov.io/gh/webpack-contrib/iterateur
+[size]:      https://packagephobia.now.sh/badge?p=iterateur
+[size-url]:  https://packagephobia.now.sh/result?p=iterateur
