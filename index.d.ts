@@ -22,7 +22,9 @@ declare namespace iterateur {
   export function regexpNameResolver(regexp: RegExp): [number, number, number];
   export function registerRegExpIterator(): void;
   export function functionNameResolver(name: string): [number, number, number];
-  export function registerFunctionIterator(): void;
+  export function registerFunctionIterator(
+    switches: [namedSwitch: boolean, AnonymousSwitch: boolean],
+  ): void;
   export function registerAll(): void;
 }
 
