@@ -103,14 +103,25 @@
     return [+i0, +i1, +i2]
   }
 
-  exports.registerFunctionIterator = function () {
+  exports.registerFunctionIterator = function ([
+    /** @type {boolean} */ s0 = false,
+    /** @type {boolean} */ s1 = false
+  ]) {
+    if (!s0 && !s1) return
+
     Function.prototype[Symbol.iterator] = function* () {
       /** @type {[number, number, number]} */
       let [start, end, step] = []
       let func = this
       if (this.name) {
+        if (!s0) {
+          throw new TypeError('Function name is not allowed iterator')
+        }
         [start, end, step] = exports.functionNameResolver(this.name)
       } else {
+        if (!s1) {
+          throw new TypeError('Anonymous function is not allowed iterator')
+        }
         [expr, func] = func()
         switch (typeof expr) {
           case 'string':
@@ -136,6 +147,6 @@
   exports.registerAll = function () {
     exports.registerNumberIterator()
     exports.registerRegExpIterator()
-    exports.registerFunctionIterator()
+    exports.registerFunctionIterator([true, true])
   }
 }));

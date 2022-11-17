@@ -105,7 +105,7 @@ describe('RegExp', () => {
 })
 
 describe('Function', () => {
-  iterateur.registerFunctionIterator()
+  iterateur.registerFunctionIterator([true, true])
   describe('Anonyme', () => {
     it('should iterate from 0 to 10', () => {
       const numbers = [...() => [/10/, i => i + 1]]
