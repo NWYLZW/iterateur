@@ -48,4 +48,9 @@ console.log([...function i2_20$3(i) {
   return i < 10 ? `foo-${i}` : null;
 }]);
 // [ 'foo-2', 'foo-5', 'foo-9' ]
+console.log([...() => [
+  50,
+  i => i < 10 ? `foo-${i}` : null
+]]);
+// [ 'foo-2', 'foo-5', 'foo-9' ]
 ```

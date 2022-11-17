@@ -106,12 +106,12 @@ describe('RegExp', () => {
 
 describe('Function', () => {
   iterateur.registerFunctionIterator()
-  // describe('Anonyme', () => {
-  //   it('should iterate from 0 to 10', () => {
-  //     const numbers = [...() => [10, i => i + 1]]
-  //     expect(numbers).to.eql([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-  //   })
-  // })
+  describe('Anonyme', () => {
+    it('should iterate from 0 to 10', () => {
+      const numbers = [...() => [/10/, i => i + 1]]
+      expect(numbers).to.eql([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+    })
+  })
   describe('Named', () => {
     it('should iterate from 1 to 10', () => {
       const numbers = [...function i0_10$plusOne(i) {

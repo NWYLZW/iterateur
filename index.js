@@ -110,11 +110,25 @@
       let func = this
       if (this.name) {
         [start, end, step] = exports.functionNameResolver(this.name)
-        for (let i of exports.range(end, start, step)) {
-          yield func(i)
-        }
       } else {
-        throw new TypeError('Not implemented')
+        [expr, func] = func()
+        switch (typeof expr) {
+          case 'string':
+            [start, end, step] = exports.functionNameResolver(expr)
+            break
+          case 'number':
+            throw new Error('Not implemented')
+          case 'object':
+            if (expr instanceof RegExp) {
+              [start, end, step] = exports.regexpNameResolver(expr)
+            }
+            break
+          default:
+            throw new TypeError('Invalid expression')
+        }
+      }
+      for (let i of exports.range(end, start, step)) {
+        yield func(i)
       }
     }
   }
