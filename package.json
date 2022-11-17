@@ -1,6 +1,9 @@
 {
   "name": "iterateur",
-  "version": "0.2.0",
+  "version": "0.2.1",
+  "engines": {
+    "node": ">=16.18.0"
+  },
   "main": "index.js",
   "types": "index.d.ts",
   "author": "YiJie <yijie4188@gmail.com>",
