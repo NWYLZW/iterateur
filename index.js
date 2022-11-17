@@ -23,6 +23,14 @@
   exports.InfinityError = InfinityError
 
   exports.range = function* (/** @type {number} */ end, start = 0, step = 1) {
+    if (end === Infinity) {
+      let i = 0
+      while (exports.INFINITY_LIMIT === -1 || i++ < exports.INFINITY_LIMIT) {
+        yield Infinity
+      }
+      throw new InfinityError()
+    }
+
     let direction = start < 0 ? -1 : 1
 
     if (start > end) {
@@ -37,27 +45,27 @@
     }
   }
 
+  exports.numberNameResolver = function (/** @type {number} */ val) {
+    if (Number.isNaN(val)) {
+      throw new TypeError('NaN is not iterable');
+    }
+    if (val === Infinity) {
+      return [0, Infinity]
+    }
+    let start = 0, end = val
+    if (!Number.isInteger(val)) {
+      const [l, r] = /-?(\d+)\.(\d+)/.exec(val).slice(1)
+      ;[start, end] = [+l, +r]
+      if (val < 0) {
+        ;[start, end] = [end, start]
+      }
+    }
+    return [start, end]
+  }
+
   exports.registerNumberIterator = function () {
     Number.prototype[Symbol.iterator] = function* (step = 1) {
-      const val = this.valueOf()
-      if (Number.isNaN(val)) {
-        throw new TypeError('NaN is not iterable');
-      }
-      if (val === Infinity) {
-        let i = 0
-        while (exports.INFINITY_LIMIT === -1 || i++ < exports.INFINITY_LIMIT) {
-          yield Infinity
-        }
-        throw new InfinityError()
-      }
-      let start = 0, end = val
-      if (!Number.isInteger(val)) {
-        const [l, r] = /-?(\d+)\.(\d+)/.exec(val).slice(1)
-        ;[start, end] = [+l, +r]
-        if (val < 0) {
-          ;[start, end] = [end, start]
-        }
-      }
+      const [start, end] = exports.numberNameResolver(this.valueOf())
       return yield* exports.range(end, start, step)
     }
 
