@@ -26,6 +26,7 @@ TODO
 ## Demo
 
 ### Number
+
 ```js
 console.log([...10]); // [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
 console.log([...-10]); // [ 0, -1, -2, -3, -4, -5, -6, -7, -8, -9 ]
@@ -41,6 +42,7 @@ console.log([...-Infinity]); // a infinite iterator
 ```
 
 ### RegExp
+
 ```js
 console.log([.../10/]); // [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
 console.log([.../-10/]); // [ 0, -1, -2, -3, -4, -5, -6, -7, -8, -9 ]
@@ -50,6 +52,7 @@ console.log([.../1~10:2/]); // [ 1, 3, 5, 7, 9 ]
 ```
 
 ### Function
+
 ```js
 console.log([...function i2_20$3(i) {
   return i < 10 ? `foo-${i}` : null;
@@ -57,6 +60,8 @@ console.log([...function i2_20$3(i) {
 // [ 'foo-2', 'foo-5', 'foo-9' ]
 console.log([...() => [
   50,
+  // /50/,
+  // 'i2_20$3',
   i => i < 10 ? `foo-${i}` : null
 ]]);
 // [ 'foo-2', 'foo-5', 'foo-9' ]

@@ -108,8 +108,15 @@ describe('Function', () => {
   iterateur.registerFunctionIterator([true, true])
   describe('Anonyme', () => {
     it('should iterate from 0 to 10', () => {
-      const numbers = [...() => [/10/, i => i + 1]]
-      expect(numbers).to.eql([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+      expect(
+        [...() => [/10/, i => i + 1]]
+      ).to.eql([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+      expect(
+        [...() => [10, i => i + 1]]
+      ).to.eql([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+      expect(
+        [...() => ['i0_10$plusOne', i => i + 1]]
+      ).to.eql([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
     })
   })
   describe('Named', () => {

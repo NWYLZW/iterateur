@@ -136,7 +136,8 @@
             [start, end, step] = exports.functionNameResolver(expr)
             break
           case 'number':
-            throw new Error('Not implemented')
+            [start, end, step = 1] = exports.numberNameResolver(expr)
+            break
           case 'object':
             if (expr instanceof RegExp) {
               [start, end, step] = exports.regexpNameResolver(expr)
