@@ -136,5 +136,6 @@
   exports.registerAll = function () {
     exports.registerNumberIterator()
     exports.registerRegExpIterator()
+    exports.registerFunctionIterator()
   }
 }));
