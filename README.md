@@ -9,7 +9,7 @@ A powerful iterator for JavaScript.
 [//]: # ([![coverage][cover]][cover-url])
 [//]: # ([![tests][tests]][tests-url])
 
-# [Try it](https://github.io/iterateur)
+# [Try it](https://nwylzw.github.io/iterateur)
 
 # How to use
 
