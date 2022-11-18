@@ -57,6 +57,23 @@ div#app > div#container {
   min-height: 200px;
   border-top: 1px solid #ccc;
 }
+div.message {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translate(-50%, -150%);
+  padding: 1em;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition: 0.3s ease-in-out;
+}
+div.message.show {
+  opacity: 1;
+  transform: translateX(-50%);
+}
 </style>
 <link
   rel="stylesheet"
@@ -83,6 +100,12 @@ div#app > div#container {
       id="code-input-{{id}}"
       data-lang="{{lang}}"
     >{{code}}</pre>
+  </div>
+</template>
+
+<template id="message-template">
+  <div class="message">
+    {{content}}
   </div>
 </template>
 
@@ -123,6 +146,32 @@ div#app > div#container {
       input.select()
       document.execCommand('copy')
       document.body.removeChild(input)
+    }
+    let messages = []
+    /**
+     * display a message
+     * @param {string} content
+     * @param {number} duration
+     */
+    window.showMessage = function (content, duration = 3000) {
+      const message = createEleByTmpl('message-template', { content })
+      // compute message top
+      const top = messages.reduce((acc, msg) => {
+        return acc + msg.offsetHeight + 10
+      }, 10)
+      message.style.top = top + 'px'
+      document.body.appendChild(message)
+      messages.push(message)
+      setTimeout(() => {
+        message.classList.add('show')
+      }, 0)
+      setTimeout(() => {
+        message.classList.remove('show')
+        setTimeout(() => {
+          document.body.removeChild(message)
+          messages = messages.filter((m) => m !== message)
+        }, 300)
+      }, duration)
     }
   })()
 </script>
@@ -200,6 +249,7 @@ for (let i of /0~10/) {
       location.hash = `#${encodeURIComponent(editor.getValue())}`
       // copy url to clipboard
       copyToClipboard(location.href)
+      showMessage('<h3 style="margin: 0">url copied to clipboard, share it with your friends!</h3>')
     })
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, function() {
       const code = editor.getValue().trim()
