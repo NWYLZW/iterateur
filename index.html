@@ -1,79 +1,96 @@
-<style lang="css">
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-div#app {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-}
-div#app > header {
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1em 6em;
-  background-color: #333;
-  color: #fff;
-}
-div#app > div.logs {
-  flex-grow: 1;
-  height: 0;
-  padding: 10px 0;
-  overflow-y: auto;
-}
-div#app > div.logs > div.log {
-  padding: 0 10px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  column-gap: 10px;
-}
-div#app > div.logs > div.log:not(:first-child) {
-  border-top: 1px solid #ccc;
-}
-div#app > div.logs > div.log.output-warn {
-  background-color: #FEFBE7;
-}
-div#app > div.logs > div.log.output-error {
-  background-color: #FCF1F0;
-}
-div#app > div.logs > div.log > div.prefix {
-  width: 10px;
-  user-select: none;
-  color: #aaa;
-}
-div#app > div.logs > div.log > pre {
-  margin: 0;
-  padding: 3px;
-  flex-grow: 1;
-}
-div#app > div#container {
-  width: 100%;
-  min-height: 200px;
-  border-top: 1px solid #ccc;
-}
-div.message {
-  position: fixed;
-  top: 10px;
-  left: 50%;
-  transform: translate(-50%, -150%);
-  padding: 1em;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  opacity: 0;
-  transition: 0.3s ease-in-out;
-}
-div.message.show {
-  opacity: 1;
-  transform: translateX(-50%);
-}
+<style lang="css" data-name="base">
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  div.message {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translate(-50%, -150%);
+    padding: 1em;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: 0.3s ease-in-out;
+  }
+  div.message.show {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+</style>
+<style lang="css" data-name="app">
+  div#app {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+  }
+  div#app > header {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1em 6em;
+    background-color: #333;
+    color: #fff;
+  }
+  div#app > div.logs {
+    flex-grow: 1;
+    height: 0;
+    padding: 10px 0;
+    overflow-y: auto;
+  }
+  div#app > div#container {
+    width: 100%;
+    min-height: 200px;
+    border-top: 1px solid #ccc;
+  }
+</style>
+<style lang="css" data-name="logs">
+  div#app div.logs__empty {
+    width: 500px;
+    margin: 0 auto;
+    color: #aaa;
+  }
+  div#app div.logs__empty > div.title {
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+  div#app div.logs__empty > div.desc {
+    font-size: 1em;
+    font-weight: normal;
+  }
+  div#app > div.logs > div.log {
+    padding: 0 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    column-gap: 10px;
+  }
+  div#app > div.logs > div.log:not(:first-child) {
+    border-top: 1px solid #ccc;
+  }
+  div#app > div.logs > div.log.output-warn {
+    background-color: #FEFBE7;
+  }
+  div#app > div.logs > div.log.output-error {
+    background-color: #FCF1F0;
+  }
+  div#app > div.logs > div.log > div.prefix {
+    width: 10px;
+    user-select: none;
+    color: #aaa;
+  }
+  div#app > div.logs > div.log > pre {
+    margin: 0;
+    padding: 3px;
+    flex-grow: 1;
+  }
 </style>
 <link
   rel="stylesheet"
@@ -100,6 +117,19 @@ div.message.show {
       id="code-input-{{id}}"
       data-lang="{{lang}}"
     >{{code}}</pre>
+  </div>
+</template>
+
+<template id="logs-empty-template">
+  <div class="logs__empty">
+    <div class="title">
+      No logs
+    </div>
+    <div class="desc">
+      You can run code in the editor above by pressing <code>
+        <kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>Enter</kbd>
+      </code>
+    </div>
   </div>
 </template>
 
@@ -181,6 +211,15 @@ div.message.show {
   const iframe = document.getElementById('iframe')
 
   ;(function () {
+    let isEmptied = false
+    function setLogsIsEmpty() {
+      logs.innerHTML = ''
+      const empty = createEleByTmpl('logs-empty-template', {})
+      logs.appendChild(empty)
+      isEmptied = true
+    }
+    setLogsIsEmpty()
+
     /**
      * @type {{
      *   code: string;
@@ -197,6 +236,10 @@ div.message.show {
       /** @type {string} */ code,
       /** @type {string} */ lang
     ) {
+      if (isEmptied) {
+        logs.innerHTML = ''
+        isEmptied = false
+      }
       const log = createEleByTmpl('log-template', {
         type,
         code,
@@ -221,7 +264,7 @@ div.message.show {
       const { type, method, args } = e.data
       if (type === 'console') {
         if (method === 'clear') {
-          logs.innerHTML = ''
+          setLogsIsEmpty()
         } else {
           print(`output-${method}`, args.map(arg => JSON.stringify(arg)).join(' '), 'javascript')
         }
