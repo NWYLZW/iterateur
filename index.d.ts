@@ -17,7 +17,7 @@ declare namespace iterateur {
     constructor();
   }
   export const INFINITY_LIMIT: number;
-  export function range(start: number, end: number, step: number): Generator<number>
+  export function range(start: number, end: number, step: number): Generator<number>;
   export function numberNameResolver(number: number): [number, number];
   export function registerNumberIterator(): void;
   export function regexpNameResolver(regexp: RegExp): [number, number, number];
