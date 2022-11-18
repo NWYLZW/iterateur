@@ -112,6 +112,18 @@ div#app > div#container {
       }, tmpl)
       return div.children[0]
     }
+    /**
+     * copy content to clipboard
+     * @param {string} content
+     */
+    window.copyToClipboard = function (content) {
+      const input = document.createElement('input')
+      input.value = content
+      document.body.appendChild(input)
+      input.select()
+      document.execCommand('copy')
+      document.body.removeChild(input)
+    }
   })()
 </script>
 
@@ -170,43 +182,54 @@ div#app > div#container {
 </script>
 
 <script data-name="monaco">
-  const editor = monaco.editor.create(document.getElementById('container'), {
-    value: `
+  ;(function () {
+    const hash = location.hash.slice(1)
+    const code = hash ? decodeURIComponent(hash) : `
+// try it, press \`(Ctrl|Cmd) + Enter\` to run
 for (let i of /0~10/) {
   console.log(i)
 }
-    `.trim(),
-    language: 'javascript'
-  })
-  let historyIndex = -1
-  editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, function() {
-    const code = editor.getValue().trim()
-    if (code === '') return
+`.trim()
+    const editor = monaco.editor.create(document.getElementById('container'), {
+      value: code,
+      language: 'javascript'
+    })
+    let historyIndex = -1
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
+      // save code to hash
+      location.hash = `#${encodeURIComponent(editor.getValue())}`
+      // copy url to clipboard
+      copyToClipboard(location.href)
+    })
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, function() {
+      const code = editor.getValue().trim()
+      if (code === '') return
 
-    run(code, 'javascript')
-    editor.setValue('')
-    historyIndex = -1
-  })
-  editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.UpArrow, function() {
-    if (historyIndex === -1) {
-      historyIndex = historyCodes.length - 1
-    } else {
-      historyIndex--
-    }
-    if (historyIndex < 0) {
-      historyIndex = 0
-    }
-    editor.setValue(historyCodes[historyIndex].code)
-  })
-  editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.DownArrow, function() {
-    if (historyIndex === -1) {
-      historyIndex = historyCodes.length - 1
-    } else {
-      historyIndex++
-    }
-    if (historyIndex >= historyCodes.length) {
-      historyIndex = historyCodes.length - 1
-    }
-    editor.setValue(historyCodes[historyIndex].code)
-  })
+      run(code, 'javascript')
+      editor.setValue('')
+      historyIndex = -1
+    })
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.UpArrow, function() {
+      if (historyIndex === -1) {
+        historyIndex = historyCodes.length - 1
+      } else {
+        historyIndex--
+      }
+      if (historyIndex < 0) {
+        historyIndex = 0
+      }
+      editor.setValue(historyCodes[historyIndex].code)
+    })
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.DownArrow, function() {
+      if (historyIndex === -1) {
+        historyIndex = historyCodes.length - 1
+      } else {
+        historyIndex++
+      }
+      if (historyIndex >= historyCodes.length) {
+        historyIndex = historyCodes.length - 1
+      }
+      editor.setValue(historyCodes[historyIndex].code)
+    })
+  })()
 </script>
