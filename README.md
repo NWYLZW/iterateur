@@ -9,6 +9,8 @@ A powerful iterator for JavaScript.
 [//]: # ([![coverage][cover]][cover-url])
 [//]: # ([![tests][tests]][tests-url])
 
+# [Try it](https://github.io/iterateur)
+
 # How to use
 
 ## Node.js
@@ -65,6 +67,33 @@ console.log([...() => [
   i => i < 10 ? `foo-${i}` : null
 ]]);
 // [ 'foo-2', 'foo-5', 'foo-9' ]
+```
+
+### ~~`i` function~~
+
+```js
+const { i } = require('iterateur')
+
+console.log([...i`3~10:2`])
+console.log([...i('3~10:2')])
+console.log([...i('3~10:2', [
+  i => i + 1,
+  i => `foo-${i}`
+])])
+console.log([...i`3~10:2
+> ${i => i + 1}
+> ${i => `foo-${i}`}
+`])
+console.log([...i(/10/)])
+console.log([...i`${/10/}
+> ${i => i + 1}
+> ${i => `foo-${i}`}
+`])
+console.log([...i(10)])
+console.log([...i`${10}
+> ${i => i + 1}
+> ${i => `foo-${i}`}
+`])
 ```
 
 [npm]:       https://img.shields.io/npm/v/iterateur.svg
