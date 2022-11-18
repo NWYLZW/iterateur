@@ -151,7 +151,11 @@ div#app > div#container {
     window.addEventListener('message', e => {
       const { type, method, args } = e.data
       if (type === 'console') {
-        print(`output-${method}`, args.map(arg => JSON.stringify(arg)).join(' '), 'javascript')
+        if (method === 'clear') {
+          logs.innerHTML = ''
+        } else {
+          print(`output-${method}`, args.map(arg => JSON.stringify(arg)).join(' '), 'javascript')
+        }
       }
     })
   })()

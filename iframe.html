@@ -4,7 +4,7 @@
 </script>
 <script>
   const originalConsole = {}
-  const consoleMethods = ['log', 'warn', 'error', 'info']
+  const consoleMethods = ['log', 'warn', 'error', 'info', 'clear']
   consoleMethods.forEach(m => {
     originalConsole[m] = console[m]
     console[m] = (...args) => {
