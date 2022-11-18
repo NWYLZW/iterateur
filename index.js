@@ -13,7 +13,6 @@
   // attach properties to the exports object to define
   // the exported module properties.
   exports.INFINITY_LIMIT = -1
-  exports.default = exports
 
   class InfinityError extends Error {
     constructor() {
