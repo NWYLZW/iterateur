@@ -36,6 +36,12 @@ div#app > div.logs > div.log {
 div#app > div.logs > div.log:not(:first-child) {
   border-top: 1px solid #ccc;
 }
+div#app > div.logs > div.log.output-warn {
+  background-color: #FEFBE7;
+}
+div#app > div.logs > div.log.output-error {
+  background-color: #FCF1F0;
+}
 div#app > div.logs > div.log > span.prefix {
   user-select: none;
   color: #aaa;
