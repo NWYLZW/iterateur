@@ -45,6 +45,10 @@
     }
   }
 
+  exports.i = function (...params) {
+    const [strings, ...args] = params
+  }
+
   exports.numberNameResolver = function (/** @type {number} */ val) {
     if (Number.isNaN(val)) {
       throw new TypeError('NaN is not iterable');
