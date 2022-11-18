@@ -113,6 +113,14 @@ div#app > div#container {
   const iframe = document.getElementById('iframe')
 
   ;(function () {
+    /**
+     * @type {{
+     *   code: string;
+     *   lang: string;
+     * }[]}
+     */
+    window.historyCodes = []
+
     function print(
       /** @type {
        * | 'input'
@@ -131,11 +139,14 @@ div#app > div#container {
       logs.scrollTop = logs.scrollHeight
 
       monaco.editor.colorizeElement(log.querySelector('pre'), {})
+      type === 'input' && historyCodes.push({ code, lang })
     }
+
     window.run = function run(code, lang) {
       print('input', code, lang)
       iframe.contentWindow.postMessage({ type: 'run', code, lang }, '*')
     }
+
     // listen iframe messages
     window.addEventListener('message', e => {
       const { type, method, args } = e.data
@@ -155,11 +166,24 @@ for (let i of /0~10/) {
     `.trim(),
     language: 'javascript'
   })
+  let historyIndex = -1
   editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, function() {
     const code = editor.getValue().trim()
     if (code === '') return
 
     run(code, 'javascript')
     editor.setValue('')
+    historyIndex = -1
+  })
+  editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.UpArrow, function() {
+    if (historyIndex === -1) {
+      historyIndex = historyCodes.length - 1
+    } else {
+      historyIndex--
+    }
+    if (historyIndex < 0) {
+      historyIndex = 0
+    }
+    editor.setValue(historyCodes[historyIndex].code)
   })
 </script>
