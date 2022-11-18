@@ -42,7 +42,8 @@ div#app > div.logs > div.log.output-warn {
 div#app > div.logs > div.log.output-error {
   background-color: #FCF1F0;
 }
-div#app > div.logs > div.log > span.prefix {
+div#app > div.logs > div.log > div.prefix {
+  width: 10px;
   user-select: none;
   color: #aaa;
 }
@@ -77,7 +78,7 @@ div#app > div#container {
 
 <template id="log-template">
   <div class="log {{type}}">
-    <span class="prefix">></span>
+    <div class="prefix">{{prefix}}</div>
     <pre
       id="code-input-{{id}}"
       data-lang="{{lang}}"
@@ -139,6 +140,7 @@ div#app > div#container {
         type,
         code,
         lang,
+        prefix: type === 'input' ? '>' : '',
         id: Date.now()
       })
       logs.appendChild(log)
