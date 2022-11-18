@@ -190,4 +190,15 @@ for (let i of /0~10/) {
     }
     editor.setValue(historyCodes[historyIndex].code)
   })
+  editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.DownArrow, function() {
+    if (historyIndex === -1) {
+      historyIndex = historyCodes.length - 1
+    } else {
+      historyIndex++
+    }
+    if (historyIndex >= historyCodes.length) {
+      historyIndex = historyCodes.length - 1
+    }
+    editor.setValue(historyCodes[historyIndex].code)
+  })
 </script>
