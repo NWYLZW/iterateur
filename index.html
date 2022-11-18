@@ -1,0 +1,165 @@
+<style lang="css">
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+div#app {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+div#app > header {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em 6em;
+  background-color: #333;
+  color: #fff;
+}
+div#app > div.logs {
+  flex-grow: 1;
+  height: 0;
+  padding: 10px 0;
+  overflow-y: auto;
+}
+div#app > div.logs > div.log {
+  padding: 0 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  column-gap: 10px;
+}
+div#app > div.logs > div.log:not(:first-child) {
+  border-top: 1px solid #ccc;
+}
+div#app > div.logs > div.log > span.prefix {
+  user-select: none;
+  color: #aaa;
+}
+div#app > div.logs > div.log > pre {
+  margin: 0;
+  padding: 3px;
+  flex-grow: 1;
+}
+div#app > div#container {
+  width: 100%;
+  min-height: 200px;
+  border-top: 1px solid #ccc;
+}
+</style>
+<link
+  rel="stylesheet"
+  data-name="vs/editor/editor.main"
+  href="./monaco/min/vs/editor/editor.main.css"
+>
+
+<div id="app">
+  <header>
+    <h1 style="margin: 0">
+      <a href="https://github.com/NWYLZW/iterateur" style="color: #fff; text-decoration: none">Iterateur</a>
+    </h1>
+  </header>
+  <div class="logs">
+  </div>
+  <div id="container"></div>
+</div>
+<iframe id="iframe" src="./iframe.html" style="display: none"></iframe>
+
+<template id="log-template">
+  <div class="log {{type}}">
+    <span class="prefix">></span>
+    <pre
+      id="code-input-{{id}}"
+      data-lang="{{lang}}"
+    >{{code}}</pre>
+  </div>
+</template>
+
+<script>
+  var require = { paths: { vs: './monaco/min/vs' } }
+</script>
+<script src="./monaco/min/vs/loader.js"></script>
+<script src="./monaco/min/vs/editor/editor.main.nls.js"></script>
+<script src="./monaco/min/vs/editor/editor.main.js"></script>
+
+<script data-name="lib">
+  ;(function () {
+    const tmplCache = {}
+    /**
+     * create a template from a template node
+     *
+     * @param {string} tmplId
+     * @param {Record<string, any>} data
+     * @returns {Element}
+     */
+    window.createEleByTmpl = function (tmplId, data) {
+      const tmpl = tmplCache[tmplId] || (tmplCache[tmplId] = document.getElementById(tmplId).innerHTML.trim())
+
+      const div = document.createElement('div')
+      div.innerHTML = Object.keys(data).reduce((acc, key) => {
+        return acc.replace(new RegExp(`{{${key}}}`, 'g'), data[key])
+      }, tmpl)
+      return div.children[0]
+    }
+  })()
+</script>
+
+<script data-name="resolve-log">
+  const logs = document.querySelector('div.logs')
+  const iframe = document.getElementById('iframe')
+
+  ;(function () {
+    function print(
+      /** @type {
+       * | 'input'
+       * | `output-${'info' | 'log' | 'warn' | 'error'}`
+       * } */ type,
+      /** @type {string} */ code,
+      /** @type {string} */ lang
+    ) {
+      const log = createEleByTmpl('log-template', {
+        type,
+        code,
+        lang,
+        id: Date.now()
+      })
+      logs.appendChild(log)
+      logs.scrollTop = logs.scrollHeight
+
+      monaco.editor.colorizeElement(log.querySelector('pre'), {})
+    }
+    window.run = function run(code, lang) {
+      print('input', code, lang)
+      iframe.contentWindow.postMessage({ type: 'run', code, lang }, '*')
+    }
+    // listen iframe messages
+    window.addEventListener('message', e => {
+      const { type, method, args } = e.data
+      if (type === 'console') {
+        print(`output-${method}`, args.map(arg => JSON.stringify(arg)).join(' '), 'javascript')
+      }
+    })
+  })()
+</script>
+
+<script data-name="monaco">
+  const editor = monaco.editor.create(document.getElementById('container'), {
+    value: `
+for (let i of /0~10/) {
+  console.log(i)
+}
+    `.trim(),
+    language: 'javascript'
+  })
+  editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, function() {
+    const code = editor.getValue().trim()
+    if (code === '') return
+
+    run(code, 'javascript')
+    editor.setValue('')
+  })
+</script>

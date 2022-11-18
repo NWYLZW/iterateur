@@ -1,0 +1,30 @@
+<script src="./index.js"></script>
+<script>
+  iterateur.registerAll()
+</script>
+<script>
+  const originalConsole = {}
+  const consoleMethods = ['log', 'warn', 'error', 'info']
+  consoleMethods.forEach(m => {
+    originalConsole[m] = console[m]
+    console[m] = (...args) => {
+      originalConsole[m](...args)
+      parent.postMessage({
+        type: 'console',
+        method: m,
+        args
+      }, '*')
+    }
+  })
+  // listen iframe messages
+  window.addEventListener('message', e => {
+    const { type, code, lang } = e.data
+    if (type === 'run') {
+      switch (lang) {
+        case 'javascript':
+          eval(code)
+          break
+      }
+    }
+  })
+</script>
