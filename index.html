@@ -1,102 +1,138 @@
-<style lang="css" data-name="base">
-  html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  div.message {
-    position: fixed;
-    top: 10px;
-    left: 50%;
-    transform: translate(-50%, -150%);
-    padding: 1em;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    transition: 0.3s ease-in-out;
-  }
-  div.message.show {
-    opacity: 1;
-    transform: translateX(-50%);
-  }
-</style>
-<style lang="css" data-name="app">
-  div#app {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-  }
-  div#app > header {
-    flex: 0 0 auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1em 6em;
-    background-color: #333;
-    color: #fff;
-  }
-  div#app > div.logs {
-    flex-grow: 1;
-    height: 0;
-    padding: 10px 0;
-    overflow-y: auto;
-  }
-  div#app > div#container {
-    width: 100%;
-    min-height: 200px;
-    border-top: 1px solid #ccc;
-  }
-</style>
-<style lang="css" data-name="logs">
-  div#app div.logs__empty {
-    width: 500px;
-    margin: 0 auto;
-    color: #aaa;
-  }
-  div#app div.logs__empty > div.title {
-    font-size: 1.5em;
-    font-weight: bold;
-  }
-  div#app div.logs__empty > div.desc {
-    font-size: 1em;
-    font-weight: normal;
-  }
-  div#app > div.logs > div.log {
-    padding: 0 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    column-gap: 10px;
-  }
-  div#app > div.logs > div.log:not(:first-child) {
-    border-top: 1px solid #ccc;
-  }
-  div#app > div.logs > div.log.output-warn {
-    background-color: #FEFBE7;
-  }
-  div#app > div.logs > div.log.output-error {
-    background-color: #FCF1F0;
-  }
-  div#app > div.logs > div.log > div.prefix {
-    width: 10px;
-    user-select: none;
-    color: #aaa;
-  }
-  div#app > div.logs > div.log > pre {
-    margin: 0;
-    padding: 3px;
-    flex-grow: 1;
-  }
-</style>
-<link
-  rel="stylesheet"
-  data-name="vs/editor/editor.main"
-  href="./monaco/min/vs/editor/editor.main.css"
->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Iterateur</title>
+
+  <style lang="css" data-name="base">
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    div.message {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translate(-50%, -150%);
+      padding: 1em;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transition: 0.3s ease-in-out;
+    }
+    div.message.show {
+      opacity: 1;
+      transform: translateX(-50%);
+    }
+  </style>
+  <style lang="css" data-name="app">
+    div#app {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+    }
+    div#app > header {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1em 6em;
+      background-color: #333;
+      color: #fff;
+    }
+    div#app > div.logs {
+      flex-grow: 1;
+      height: 0;
+      padding: 10px 0;
+      overflow-y: auto;
+    }
+    div#app > div#container {
+      width: 100%;
+      min-height: 200px;
+      border-top: 1px solid #ccc;
+    }
+    div#app > div#start {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      bottom: 180px;
+      left: 10px;
+      width: 1.2em;
+      height: 1.2em;
+      padding: 10px;
+      font-size: 1.2em;
+      color: #65b766;
+      cursor: pointer;
+      user-select: none;
+      border: 1px solid lightgray;
+      border-radius: 4px;
+      background-color: white;
+      transition: 0.3s ease-in-out;
+    }
+    div#app > div#start:hover {
+      bottom: 210px;
+      background-color: #65b766;
+      color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+  <style lang="css" data-name="logs">
+    div#app div.logs__empty {
+      width: 500px;
+      margin: 0 auto;
+      color: #aaa;
+    }
+    div#app div.logs__empty > div.title {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+    div#app div.logs__empty > div.desc {
+      font-size: 1em;
+      font-weight: normal;
+    }
+    div#app > div.logs > div.log {
+      padding: 0 10px;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      column-gap: 10px;
+    }
+    div#app > div.logs > div.log:not(:first-child) {
+      border-top: 1px solid #ccc;
+    }
+    div#app > div.logs > div.log.output-warn {
+      background-color: #FEFBE7;
+    }
+    div#app > div.logs > div.log.output-error {
+      background-color: #FCF1F0;
+    }
+    div#app > div.logs > div.log > div.prefix {
+      width: 10px;
+      user-select: none;
+      color: #aaa;
+    }
+    div#app > div.logs > div.log > pre {
+      margin: 0;
+      padding: 3px;
+      flex-grow: 1;
+    }
+  </style>
+  <link
+    rel="stylesheet"
+    data-name="vs/editor/editor.main"
+    href="./monaco/min/vs/editor/editor.main.css"
+  >
+</head>
+<body>
 
 <div id="app">
   <header>
@@ -106,6 +142,7 @@
   </header>
   <div class="logs">
   </div>
+  <div id="start">▶</div>
   <div id="container"></div>
 </div>
 <iframe id="iframe" src="./iframe.html" style="display: none"></iframe>
@@ -380,5 +417,23 @@ for (let i of /0~10/) {
       editor.setValue(historyCodes[historyIndex].code)
     })
     editor.focus()
+
+    function throttle(fn, delay) {
+      let timer
+      return function () {
+        if (timer) return
+        timer = setTimeout(() => {
+          fn.apply(this, arguments)
+          timer = null
+        }, delay)
+      }
+    }
+    document.querySelector('#start')
+      .addEventListener('click', throttle(() => {
+        run(editor.getValue(), 'javascript')
+      }, 200))
   })()
 </script>
+
+</body>
+</html>
